@@ -1,0 +1,38 @@
+[
+{
+  "model": "users.usermodel",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$dfhAXyeobYq4WDKydQsCJj$hR0VLqvHNX1y77tfA0EXNM5UVvCai82rGaMrAR6pfaY=",
+    "last_login": "2024-09-03T17:49:52.118Z",
+    "is_superuser": true,
+    "first_name": "Musulmankul",
+    "last_name": "Mamadiev",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2024-07-19T15:59:13.997Z",
+    "username": "Musulmankul",
+    "email": "musulmankul05@icloud.com",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.usermodel",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$kgMWt79mGJQt34Kpt6K1C2$faCEmW5SD94LufNYKm6mozBO30s9nGTsslNIg6+dK8Q=",
+    "last_login": "2024-09-03T17:36:56.000Z",
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2024-08-27T16:02:46.065Z",
+    "username": "Musulmankul2",
+    "email": "musulmankul05@gmail.com",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -1,0 +1,131 @@
+{% load static tailwind_tags %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note</title>
+    {% tailwind_css %}
+    <script src="https://kit.fontawesome.com/2d9aedc924.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 font-inter">
+    <!-- Header -->
+    <header class="bg-slate-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
+        {% if user.is_superuser %}
+        	<a href="admin/" class="text-2xl hover:text-gray-200 font-semibold lg:ml-[34rem]">
+                👑 Lemonotes
+            </a>
+        {% else %}
+            <h1 class="text-2xl pointer-events-none font-semibold lg:ml-[34rem]">
+                🍋 Lemonotes
+            </h1>
+        {% endif %} 
+            <!-- Brand/Title -->
+
+            <!-- Navigation Links -->
+            <nav class="flex lg:space-x-12 sm:space-x-4 items-center">
+                <a href="{% url 'notes:new-note' %}"
+                    class="rounded-[5px] bg-[#648589] hover:bg-[#7ba1a6] lg:mr-0 mr-5 sm:mr-0 px-3 py-2 fa-solid fa-plus text-lg"></a>
+                <a href="{% url 'index' %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-lemon mr-5"></a>
+                <a href="
+                {% if user.is_authenticated %}{% url 'account:settings' %}{% else %}{% url 'account:login' %}{% endif %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-gear mr-5"></a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account:logout' %}" class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-right-from-bracket"></a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+<!-- Content -->
+<div class="container mx-auto mt-12 md:mt-24 px-4 text-slate-700">
+    <div class="flex justify-between items-center">
+        <a href="{% url 'index' %}" class="fa-solid fa-angle-left ml-3.5 text-2xl font-bold text-slate-600 hover:text-slate-500"><span class="ml-1 font-medium font-inter">back</span></a>
+        <div class="mr-8 sm:mr-10 md:mr-16 lg:mr-24">
+            <a href="{% url 'notes:delete-note' slug=note.slug %}" class="fa-solid fa-trash mr-3 sm:mr-5 md:mr-8 lg:mr-8 text-xl bg-slate-500 rounded-full px-[20px] p-4 text-gray-100 hover:bg-slate-600 transition"></a>
+            <a href="{% url 'notes:edit-note' slug=note.slug %}" class="fa-solid fa-pen text-xl bg-slate-500 rounded-full p-4 text-gray-100 hover:bg-slate-600 transition"></a>
+        </div>
+    </div>
+    <p class="text-xs mt-8 ml-3 text-slate-400">Created: {{ note.created_at|date:"m.d.Y" }}
+        {% if not note.updated_at == note.created_at %}
+            <span class="ml-6">Edited: {{ note.updated_at|date:"m.d.Y" }}</span>
+        {% endif %} 
+        {% if note.pinned %}
+            <span class="ml-6">Pinned <span class="fa-solid fa-thumbtack text-xszaxw"></span></span></p>
+        {% endif %} 
+    <h1 class="text-2xl mt-2 ml-3 font-black sm:text-3xl md:text-4xl lg:text-4xl">{{ note.decrypted_title }}</h1>
+    <textarea id="hs-autoheight-textarea" class="mt-4 font-medium border-none bg-gray-100 border-transparent focus:border-transparent resize-none focus:ring-0 w-full overflow-hidden" readonly>{{ note.decrypted_content }}</textarea>
+</div>
+</body>
+
+<script>
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'hidden') {
+        // User has switched tabs or minimized the browser
+        updateSession('hidden');
+    }
+});
+
+function updateSession(state) {
+    fetch('/note/update-session/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // Ensure you include the CSRF token
+        },
+        body: JSON.stringify({ state: state })
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function auto_grow(element) {
+  element.style.height = "5px";
+  element.style.height = (element.scrollHeight) + "px";
+}
+  (function () {
+    function textareaAutoHeight(el, offsetTop = 0) {
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight + offsetTop}px`;
+    }
+
+(function () {
+  const textareas = [
+    '#hs-autoheight-textarea'
+  ];
+
+  textareas.forEach((el) => {
+    const textarea = document.querySelector(el);
+    const overlay = textarea.closest('.hs-overlay');
+
+    if (overlay) {
+      const { element } = HSOverlay.getInstance(overlay, true);
+
+      element.on('open', () => textareaAutoHeight(textarea, 3));
+    } else textareaAutoHeight(textarea, 3);
+
+    textarea.addEventListener('input', () => {
+      textareaAutoHeight(textarea, 3);
+    });
+  });
+})();
+})()
+</script>
+</html>

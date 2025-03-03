@@ -1,0 +1,67 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    {% tailwind_css %}
+    <script src="https://kit.fontawesome.com/2d9aedc924.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 font-inter">
+    <!-- Header -->
+    <header class="bg-slate-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
+        {% if user.is_superuser %}
+        	<a href="admin/" class="text-2xl hover:text-gray-200 font-semibold lg:ml-[34rem]">
+                👑 Lemonotes
+            </a>
+        {% else %}
+            <h1 class="text-2xl pointer-events-none font-semibold lg:ml-[34rem]">
+                🍋 Lemonotes
+            </h1>
+        {% endif %}
+            <!-- Brand/Title -->
+
+            <!-- Navigation Links -->
+            <nav class="flex lg:space-x-12 sm:space-x-4 items-center">
+                <a href="{% url 'notes:new-note' %}"
+                    class="rounded-[5px] bg-[#648589] hover:bg-[#7ba1a6] lg:mr-0 mr-5 sm:mr-0 px-3 py-2 fa-solid fa-plus text-lg"></a>
+                <a href="{% url 'index' %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-lemon mr-5"></a>
+                <a href="
+                {% if user.is_authenticated %}{% url 'account:settings' %}{% else %}{% url 'account:login' %}{% endif %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-gear mr-5"></a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account:logout' %}" class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-right-from-bracket"></a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+<div class="mt-16 flex-col flex justify-center">
+    <div class="w-3/4 md:w-[50%] lg:w-[30%] mx-auto p-8">
+    <!-- Profile Section -->
+    <div class="p-6 mb-8">
+        <h2 class="flex justify-center items-center text-2xl font-semibold mb-4">{{ user.username }}</h2>
+        <div class="flex justify-center items-center space-x-4">
+            <div>
+                <p class="text-gray-500 text-sm md:text-medium lg:text-lg">{{ user.email }}</p>
+            </div>
+        </div>
+        <br class="my-3">
+        <div class="flex flex-col justify-center p-6">
+            <a href="#" class="bg-[#648589] hover:bg-[#7ba1a6] rounded-xl shadow-lg p-4 text-sm font-bold items-center flex text-white mb-12"><span class="fa-solid fa-user-pen text-2xl mr-3"></span> Edit profile</a>
+        </div>
+    </div>
+    <div class="flex-col flex justify-center mt-2 p-6">
+        <a href="{% url 'notes:note-pass-change' %}" class="bg-gray-200 rounded-lg hover:bg-gray-300 shadow-md p-4 text-sm font-bold items-center flex text-slate-600 mb-12"><span class="fa-solid fa-key text-2xl mr-3"></span> Change notes password</a>
+        <a href="{% url 'account:new-password' %}" class="bg-gray-200 rounded-lg hover:bg-gray-300 shadow-md p-4 text-sm font-bold text-slate-600"><span class="fa-solid fa-user-lock text-2xl mr-3"></span> Change auth password</a>
+    </div>
+
+    <!-- Change Password Section -->
+</div>
+</div>
+</body>
+</html>

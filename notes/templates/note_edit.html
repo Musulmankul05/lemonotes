@@ -1,0 +1,160 @@
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Note</title>
+    {% tailwind_css %}
+    <script src="https://kit.fontawesome.com/2d9aedc924.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 font-inter">
+    <!-- Header -->
+    <header class="bg-slate-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
+            <h1 class="text-md sm:text-md md:text-lg lg:text-xl pointer-events-none font-semibold md:ml-60 lg:ml-[34rem]">
+                🍋 Lemonotes
+            </h1>
+            <!-- Brand/Title -->
+
+            <!-- Navigation Links -->
+            <nav class="flex lg:space-x-12 sm:space-x-4 items-center">
+                <a href="{% url 'notes:new-note' %}"
+                    class="rounded-[5px] bg-[#648589] hover:bg-[#7ba1a6] lg:mr-0 mr-5 sm:mr-0 px-3 py-2 fa-solid fa-plus text-lg"></a>
+                <a href="{% url 'index' %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-lemon mr-5"></a>
+                <a href="{% url 'account:settings' %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-gear mr-5"></a>
+                <a href="{% url 'account:logout' %}"
+                class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-right-from-bracket"></a>
+            </nav>
+        </div>
+    </header>
+
+<!-- Content -->
+<div class="mt-14 text-slate-700 mx-8 sm:mx-12 md:mx-24 lg:mx-36">
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-between items-center">
+            <div class="flex items-center flex-row">
+{#                <div class="ml-2 lg:text-lg">#}
+{#                    <div class="relative">#}
+{#                        <button id="dropdownButton" class="text-slate-400 font-semibold focus:outline-none">#}
+{#                            Tags: No tag#}
+{#                            <svg class="w-4 h-4 inline-block ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">#}
+{#                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>#}
+{#                            </svg>#}
+{#                        </button>#}
+{#    #}
+{#                        <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-gray-100 border border-gray-200 rounded-md shadow-lg">#}
+{#                            <a href="#" class="block px-4 py-3 text-sm text-gray-600 hover:bg-gray-200">No tag</a>#}
+{#                            <a href="#" class="block px-4 py-2 text-xl text-blue-400 hover:bg-gray-200">● <span class="text-gray-600 text-sm ml-3">Personal</span></a>#}
+{#                            <a href="#" class="block px-4 py-2 text-xl text-green-400 hover:bg-gray-200">● <span class="text-gray-600 text-sm ml-3">Work</span></a>#}
+{#                            <a href="#" class="block px-4 py-2 text-xl text-red-500 hover:bg-gray-200">● <span class="text-gray-600 text-sm ml-3">Important</span></a>#}
+{#                            <a href="#" class="block px-4 py-2 text-xl text-orange-400 hover:bg-gray-200">● <span class="text-gray-600 text-sm ml-3">List</span></a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+                <button onclick="togglePrivate({{ note.slug }}, {{ note.private|yesno:'true,false' }})" class="fa-solid fa-lock ml-6 sm:ml-6 md:ml-8 lg:ml-12 text-md sm:text-md md:text-lg lg:text-lg bg-slate-500 rounded-full p-4 px-5 text-gray-100 hover:bg-slate-600 transition"></button>
+                <p class="text-sm text-slate-400 font-semibold ml-8">Pin:</p>
+                <label class="relative ml-2 inline-flex cursor-pointer items-center">
+                    {{ form.pinned|add_class:"peer sr-only" }}
+                    <label for="switch" class="hidden"></label>
+                    <div class="peer h-12 w-[72px] rounded-full bg-slate-400 relative after:absolute after:right-[30px] after:top-[5.5px] after:h-9 after:w-9 after:rounded-full after:bg-white after:transition-all after:flex after:items-center after:justify-center peer-checked:bg-slate-500 peer-checked:after:translate-x-[25px] peer-checked:after:border-white"></div>
+                </label>
+            </div>
+            <div class="mr-8 sm:mr-10">
+                <button type="submit" class="fa-solid fa-check mr-3 sm:mr-5 md:mr-8 lg:mr-8 text-md sm:text-md md:text-lg lg:text-xl bg-[#648589] rounded-full px-[20px] p-4 text-gray-100 hover:bg-[#7ba1a6] transition"></button>
+                <a href="{{ previous_url }}" class="fa-solid fa-xmark text-md sm:text-md md:text-lg lg:text-xl bg-slate-500 rounded-full p-4 px-5 text-gray-100 hover:bg-slate-600 transition"></a>
+            </div>
+        </div>
+        <p class="ml-4 text-xs font-black mt-8 text-slate-400">● Edit</p>
+        <div class="flex flex-col">
+            {{ form.title|add_class:"text-2xl sm:text-3xl md:text-4xl lg:text-4xl border-none bg-gray-100 border-transparent focus:border-transparent focus:ring-0 mt-2 font-bold" }}
+            {{ form.content|add_class:"mt-4 font-medium border-none bg-gray-100 border-transparent focus:border-transparent resize-none focus:ring-0 w-full overflow-hidden" }}
+        </div>
+    </form>
+</div>
+
+<!-- Script -->
+<script>
+    const dropdownButton = document.getElementById('dropdownButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    dropdownButton.addEventListener('click', function () {
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    // Optional: Close the dropdown if clicked outside
+    document.addEventListener('click', function (event) {
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+    });
+
+    const textarea = document.getElementById('auto-growing-textarea');
+
+    textarea.addEventListener('input', function () {
+        this.style.height = 'auto'; // Reset height to auto to calculate the new height
+        this.style.height = this.scrollHeight + 'px'; // Set the height to the scroll height
+    });
+
+    // Optional: Trigger the input event to resize the textarea when the page loads
+    textarea.dispatchEvent(new Event('input'));
+    
+    // Lock button
+    function togglePrivate(noteId, isPrivate) {
+    fetch('/lock/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ 'post_id': noteId, 'is_private': !isPrivate })
+    }).then(response => {
+        if (response.ok) {
+            // Handle success, e.g., reload the page or update the button text
+            window.location.reload();
+        } else {
+            alert('Error toggling private status.');
+        }
+    });
+}
+
+
+function auto_grow(element) {
+  element.style.height = "5px";
+  element.style.height = (element.scrollHeight) + "px";
+}
+  (function () {
+    function textareaAutoHeight(el, offsetTop = 0) {
+      el.style.height = 'auto';
+      el.style.height = `${el.scrollHeight + offsetTop}px`;
+    }
+
+(function () {
+  const textareas = [
+    '#hs-autoheight-textarea'
+  ];
+
+  textareas.forEach((el) => {
+    const textarea = document.querySelector(el);
+    const overlay = textarea.closest('.hs-overlay');
+
+    if (overlay) {
+      const { element } = HSOverlay.getInstance(overlay, true);
+
+      element.on('open', () => textareaAutoHeight(textarea, 3));
+    } else textareaAutoHeight(textarea, 3);
+
+    textarea.addEventListener('input', () => {
+      textareaAutoHeight(textarea, 3);
+    });
+  });
+})();
+})()
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% load static tailwind_tags %}
+{% load widget_tweaks %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Login</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 font-inter">
+<div class="flex justify-center mt-16">
+   <div class="mx-auto flex h-[80%] max-w-lg flex-col md:max-w-none md:flex-row">
+       <form method="post">
+           {% csrf_token %}
+          <div class="px-4 py-20 lg:px-36 md:px-28 w-full sm:px-16">
+            <h2 class="mb-8 text-3xl font-bold">Log in</h2>
+            <p class="mb-1 font-medium text-gray-500">Log in with</p>
+              <a class="-2 mt-2 flex items-center justify-center rounded-md border px-4 py-1 bg-gray-200 outline-none ring-gray-400 ring-offset-2
+              transition duration-500 hover:border-transparent hover:bg-gray-600 hover:text-white focus:ring-2"><img class="mr-2 h-5" src="{% static 'ui/google.webp' %}" alt /></a>
+            <div class="mb-6 flex flex-col gap-y-2 gap-x-4 lg:flex-row">
+            </div>
+          <div class="relative my-8 flex h-px place-items-center bg-gray-200">
+            <div class="absolute left-1/2 h-6 -translate-x-1/2 px-4 bg-gray-100 text-center text-xs text-gray-500">Or just by username</div>
+          </div>
+            <p class="mb-1 font-medium text-gray-500">Username</p>
+            <div class="mb-4 flex flex-col">
+              <div class="relativeflex overflow-hidden rounded-md sm:w-80 lg:w-full">
+                {{ form.username|add_class:"w-full border-gray-300 px-8 py-2 text-base text-gray-700 placeholder-gray-400 outline-none rounded-xl" }}
+              </div>
+            </div>
+            <p class="mb-1 font-medium text-gray-500">Password</p>
+            <div class="mb-4 flex flex-col">
+              <div class="relative flex overflow-hidden rounded-md sm:w-80 lg:w-full">
+                {{ form.password|add_class:"w-full border-gray-300 bg-white px-8 py-2 text-base text-gray-700 placeholder-gray-400 outline-none rounded-xl" }}
+              </div>
+            </div>
+            <button class="hover:bg-slate-500 rounded-xl bg-slate-600 px-8 py-3 font-bold text-white transition-all" type="submit">Log in</button>
+              <a href="{% url 'account:register' %}" class="mt-4 block font-bold text-gray-600 hover:text-gray-800">Or create an account</a>
+          </div>
+       </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% load static tailwind_tags %}
+{% load note_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lemonotes</title>
+    {% tailwind_css %}
+    <script src="https://kit.fontawesome.com/2d9aedc924.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-gray-100 font-inter">
+
+    <!-- Header -->
+    <header class="bg-slate-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-1.5 flex items-center justify-between">
+        {% if user.is_superuser %}
+        	<a href="admin/" class="text-2xl hover:text-gray-200 font-semibold lg:ml-[34rem]">
+                👑 Lemonotes
+            </a>
+        {% else %}
+            <h1 class="text-2xl pointer-events-none font-semibold lg:ml-[34rem]">
+                🍋 Lemonotes
+            </h1>
+        {% endif %} 
+            <!-- Brand/Title -->
+
+            <!-- Navigation Links -->
+            <nav class="flex lg:space-x-12 sm:space-x-4 items-center">
+                <a href="{% url 'notes:new-note' %}"
+                    class="rounded-[5px] bg-[#648589] hover:bg-[#7ba1a6] lg:mr-0 mr-5 sm:mr-0 px-3 py-2 fa-solid fa-plus text-lg"></a>
+                <a href="{% url 'index' %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-lemon mr-5"></a>
+                <a href="
+                {% if user.is_authenticated %}{% url 'account:settings' %}{% else %}{% url 'account:login' %}{% endif %}"
+                   class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-gear mr-5"></a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account:logout' %}" class="hover:bg-slate-500 px-2 py-2 rounded-full text-lg font-lg fa-solid fa-right-from-bracket"></a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mx-auto mt-12 md:mt-24 px-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 md:gap-0 gap-4 place-items-center">
+            {% for note in notes %}
+                <a href="{% url 'notes:notes' note.slug %}" class="bg-slate-600 p-4 md:p-6 w-full sm:w-5/6 md:w-2/3 rounded-xl md:rounded-2xl shadow-[0_3px_10px_rgb(0,0,0,0.2)] mb-6 md:mb-12 hover:bg-slate-500 flex flex-col sml:max-h-42 lg:h-40 md:h-52">
+                {% if note.pinned %}
+                    <div class="flex justify-center">
+                	    <span class="fa-solid fa-thumbtack text-2xs text-white"></span>
+                    </div>
+                {% endif %}
+                    <h1 class="text-white text-sm md:text-lg font-bold mb-1 md:mb-2">{{ note.decrypted_title|truncatechars:24 }}</h1>
+                <div class="mt-2">
+                    {% if note.private %}
+                        <div class="flex justify-center">
+                            <p class="text-white text-xs py-1.5"><span class="fa-solid fa-lock text-4xl"></span></p>
+                        </div>
+                    {% else %}
+                        <p class="text-white text-xs">{{ note.decrypted_content|truncatechars:65 }}</p>
+                    {% endif %}
+                </div>
+                </a>
+            	
+            {% endfor %}
+{#            <a href="#" class="bg-[#71ab8b] p-4 md:p-6 w-full sm:w-5/6 md:w-2/3 rounded-xl md:rounded-2xl shadow-[0_3px_10px_rgb(0,0,0,0.2)] mb-6 md:mb-12 hover:bg-[#85c7a3] flex flex-col lg:h-40 md:h-52">#}
+{#                <h1 class="text-white text-sm md:text-lg font-bold mb-2 md:mb-3">{{ '📒 Note is lorem ipsum dolor sit amet elit harum'|truncatewords:6 }}</h1>#}
+{#                <p class="text-white text-xs">{{ 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque modideleniti tempore, natus molestiae consequatur. Quidem fugit aperiam ut blanditiis ex'|truncate_chars:86 }}</p>#}
+{#            </a>#}
+        </div>
+    </div>
+</body>
+
+
+
+</html>
